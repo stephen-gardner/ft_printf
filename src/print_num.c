@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 14:28:28 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/13 23:23:01 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/13 23:46:35 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	set_prefix(t_arg *arg, int base, char *num)
 		return ;
 	if (F(F_HASH))
 	{
-		if (*num != '0')
+		if (arg->conv == 'p' || *num != '0')
 		{
 			if (base == 16 || base == 8)
 				arg->prefix[0] = '0';
