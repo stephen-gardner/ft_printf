@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 21:55:13 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/13 22:21:38 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/14 14:18:14 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ static int	fit_wchar(t_byte *str, int len)
 	i = (len - 5 > 0) ? len - 5 : 0;
 	while (str[i])
 	{
-		if (str[i] <= 0xBF)
+		if (str[i] <= 0xBF && i < len)
 			i++;
-		else if (str[i] >= 0xF0 && str[i] <= 0xFF && i + 4 <= len)
+		else if (str[i] >= 0xF0 && str[i] <= 0xFF && i + 3 < len)
 			i += 4;
-		else if (str[i] >= 0xE0 && str[i] <= 0xEF && i + 3 <= len)
+		else if (str[i] >= 0xE0 && str[i] <= 0xEF && i + 2 < len)
 			i += 3;
-		else if (str[i] >= 0xC2 && str[i] <= 0xDF && i + 2 <= len)
+		else if (str[i] >= 0xC2 && str[i] <= 0xDF && i + 1 < len)
 			i += 2;
 		else
 			return (i);
