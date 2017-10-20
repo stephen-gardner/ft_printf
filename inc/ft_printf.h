@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 12:10:24 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/13 21:21:27 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/19 20:52:32 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "libft.h"
 
 # define F(f) (arg->flags & f)
+# define BASE_KEY "0123456789abcdef"
 
 typedef struct	s_arg
 {
@@ -33,7 +34,6 @@ typedef struct	s_arg
 typedef struct	s_conv
 {
 	char	specifier;
-	int		flags;
 	int		(*handle)(t_arg *);
 }				t_conv;
 
@@ -42,16 +42,16 @@ enum	e_flags
 	F_H = 1,
 	F_HH = 1 << 1,
 	F_L = 1 << 2,
-	F_LL = 1 << 3,
-	F_J = 1 << 4,
-	F_Z = 1 << 5,
-	F_PRECISE = 1 << 6,
-	F_MINUS = 1 << 7,
-	F_PLUS = 1 << 8,
-	F_SPACE = 1 << 9,
-	F_ZERO = 1 << 10,
-	F_HASH = 1 << 11,
-	F_ALL = ~0
+	F_LD = 1 << 3,
+	F_LL = 1 << 4,
+	F_J = 1 << 5,
+	F_Z = 1 << 6,
+	F_PRECISE = 1 << 7,
+	F_MINUS = 1 << 8,
+	F_PLUS = 1 << 9,
+	F_SPACE = 1 << 10,
+	F_ZERO = 1 << 11,
+	F_HASH = 1 << 12
 };
 
 /*
@@ -67,7 +67,7 @@ int				dispatch(t_arg *arg);
 int				ft_printf(const char *format, ...);
 
 /*
-** num_handlers.c
+** int_handlers.c
 */
 
 int				print_d(t_arg *arg);
@@ -77,7 +77,7 @@ int				print_u(t_arg *arg);
 int				print_x(t_arg *arg);
 
 /*
-** num_handlers_deprecated.c
+** int_handlers_deprecated.c
 */
 
 int				print_ld_deprecated(t_arg *arg);
@@ -99,15 +99,24 @@ int				print_percent(t_arg *arg);
 int				print_str(t_arg *arg);
 
 /*
-** print_num.c
+** print_float.c
 */
 
-int				print_num(t_arg *arg, int base, t_bool is_signed);
+char			*get_float(t_arg *arg);
+int				print_float(t_arg *arg);
+
+/*
+** print_int.c
+*/
+
+int				print_int(t_arg *arg, int base, t_bool is_signed);
 
 /*
 ** util.c
 */
 
+intmax_t		get_int(t_arg *arg);
+uintmax_t		get_uint(t_arg *arg);
 char			*pf_itoa(t_arg *arg, intmax_t n, int base);
 char			*pf_uitoa(uintmax_t un, int base);
 int				write_pad(int size, char c);

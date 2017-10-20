@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 12:01:33 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/13 21:11:33 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/16 12:58:35 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ static int	find_length(const char *fmt, t_arg *arg)
 	}
 	else if (*fmt == 'h')
 		arg->flags |= F_H;
+	else if (*fmt == 'L')
+		arg->flags |= F_LD;
 	else if (*fmt == 'l')
 		arg->flags |= F_L;
 	else if (*fmt == 'j')
@@ -71,12 +73,17 @@ static int	find_precision(const char *fmt, t_arg *arg)
 	fmt++;
 	if (*fmt == '*')
 	{
-		arg->precision = va_arg(*arg->ap, int);
+		if((arg->precision = va_arg(*arg->ap, int)) < 0)
+			arg->precision = 0;
 		return (2);
 	}
 	n = 0;
 	while (fmt[n] && ft_isdigit(fmt[n]))
+	{
+		if (fmt[n] == '*')
+			n++;
 		arg->precision = (arg->precision * 10) + (fmt[n++] - '0');
+	}
 	return (1 + n);
 }
 
@@ -86,30 +93,33 @@ static int	find_width(const char *fmt, t_arg *arg)
 
 	if (*fmt == '*')
 	{
-		arg->width = va_arg(*arg->ap, int);
+		if ((arg->width = va_arg(*arg->ap, int)) < 0)
+			arg->width = 0;
 		return (1);
 	}
 	n = 0;
 	while (fmt[n] && ft_isdigit(fmt[n]))
+	{
+		if (fmt[n] == '*')
+			n++;
 		arg->width = (arg->width * 10) + (fmt[n++] - '0');
+	}
 	return (n);
 }
 
 int			handle_arg(const char **fmt, va_list *ap)
 {
-	t_arg	*arg;
-	int		arg_len;
+	static t_arg	arg;
+	int				arg_len;
 
-	if (!(arg = (t_arg *)ft_memalloc(sizeof(t_arg))))
-		return (-1);
-	arg->ap = ap;
-	*fmt += find_flags(*fmt, arg);
-	*fmt += find_width(*fmt, arg);
-	*fmt += find_precision(*fmt, arg);
-	*fmt += find_length(*fmt, arg);
-	arg->conv = **fmt;
+	ft_memset((void *)&arg, 0, sizeof(arg));
+	arg.ap = ap;
+	*fmt += find_flags(*fmt, &arg);
+	*fmt += find_width(*fmt, &arg);
+	*fmt += find_precision(*fmt, &arg);
+	*fmt += find_length(*fmt, &arg);
+	arg.conv = **fmt;
 	(*fmt)++;
-	arg_len = dispatch(arg);
-	free(arg);
+	arg_len = dispatch(&arg);
 	return (arg_len);
 }

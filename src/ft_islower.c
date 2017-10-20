@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 01:13:12 by sgardner          #+#    #+#             */
-/*   Updated: 2017/01/08 09:27:45 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/15 13:07:49 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,5 @@
 
 t_bool	ft_islower(int c)
 {
-	return (c >= 'a' && c <= 'z');
+	return ((unsigned int)(c - 'a') < 26);
 }

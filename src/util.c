@@ -6,13 +6,53 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 18:23:34 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/13 23:20:52 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/15 16:43:27 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char	*pf_itoa(t_arg *arg, intmax_t n, int base)
+intmax_t	get_int(t_arg *arg)
+{
+	intmax_t	n;
+
+	if (F(F_H))
+		n = (short)va_arg(*arg->ap, int);
+	else if (F(F_HH))
+		n = (char)va_arg(*arg->ap, int);
+	else if (F(F_L))
+		n = (long)va_arg(*arg->ap, long);
+	else if (F(F_LL))
+		n = (long long)va_arg(*arg->ap, long long);
+	else if (F((F_J | F_Z)))
+		n = va_arg(*arg->ap, intmax_t);
+	else
+		n = va_arg(*arg->ap, int);
+	return (n);
+}
+
+uintmax_t	get_uint(t_arg *arg)
+{
+	uintmax_t	un;
+
+	if (F(F_H))
+		un = (unsigned short)va_arg(*arg->ap, unsigned int);
+	else if (F(F_HH))
+		un = (unsigned char)va_arg(*arg->ap, unsigned int);
+	else if (F(F_L))
+		un = (unsigned long)va_arg(*arg->ap, unsigned long);
+	else if (F(F_LL))
+		un = (unsigned long long)va_arg(*arg->ap, unsigned long long);
+	else if (F(F_J))
+		un = va_arg(*arg->ap, uintmax_t);
+	else if (F(F_Z) || arg->conv == 'p')
+		un = (size_t)va_arg(*arg->ap, size_t);
+	else
+		un = va_arg(*arg->ap, unsigned int);
+	return (un);
+}
+
+char		*pf_itoa(t_arg *arg, intmax_t n, int base)
 {
 	uintmax_t	un;
 
@@ -26,7 +66,7 @@ char	*pf_itoa(t_arg *arg, intmax_t n, int base)
 	return (pf_uitoa(un, base));
 }
 
-char	*pf_uitoa(uintmax_t un, int base)
+char		*pf_uitoa(uintmax_t un, int base)
 {
 	char	num[23];
 	int		digit;
@@ -43,15 +83,12 @@ char	*pf_uitoa(uintmax_t un, int base)
 	return (ft_strdup(&num[++digit]));
 }
 
-int		write_pad(int size, char c)
+int			write_pad(int size, char c)
 {
 	int	i;
 
 	i = 0;
-	while (i < size)
-	{
+	while (i++ < size)
 		write(1, &c, 1);
-		i++;
-	}
 	return (size);
 }

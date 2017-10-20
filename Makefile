@@ -1,13 +1,14 @@
 #!/usr/bin/make -f
 NAME = libftprintf.a
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -O3 -march=native -pipe -funroll-loops
+CFLAGS = -Wall -Werror -Wextra -g
 INC = -I inc
 SRC_DIR = src
 SRC = \
 	dispatcher\
 	ft_isdigit\
 	ft_islower\
+	ft_isupper\
 	ft_memalloc\
 	ft_memcpy\
 	ft_memset\
@@ -16,12 +17,14 @@ SRC = \
 	ft_strlen\
 	ft_strnlen\
 	ft_strupcase\
+	ft_tolower\
 	ft_toupper\
-	num_handlers\
-	num_handlers_deprecated\
+	int_handlers\
+	int_handlers_deprecated\
 	parser\
 	print_char\
-	print_num\
+	print_float\
+	print_int\
 	util
 OBJ_DIR = $(SRC_DIR)/obj
 OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))

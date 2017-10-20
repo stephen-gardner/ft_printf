@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/03 20:27:22 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/12 22:44:01 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/14 15:48:50 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,6 @@ int	ft_printf(const char *format, ...)
 		}
 		format = end;
 	}
+	va_end(ap);
 	return (len);
 }
