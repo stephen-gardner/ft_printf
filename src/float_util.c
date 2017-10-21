@@ -1,17 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_float.c                                      :+:      :+:    :+:   */
+/*   float_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/16 11:44:30 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/19 22:26:54 by sgardner         ###   ########.fr       */
+/*   Created: 2017/10/21 11:46:05 by sgardner          #+#    #+#             */
+/*   Updated: 2017/10/21 11:59:12 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <math.h>
-#include <stdio.h>
 #include "ft_printf.h"
 
 static void	round_fstring(char *num, int base)
@@ -55,10 +53,37 @@ static void	load_mantissa(char *num, long double f, int precision, float base)
 	}
 }
 
-static char	*pf_ftoa(long double f, int precision, float base)
+long double	get_float(t_arg *arg)
+{
+	long double	f;
+	float		base;
+	int			sign;
+
+	f = (F(F_LD)) ? va_arg(*arg->ap, long double) : va_arg(*arg->ap, double);
+	if (f == 1.0 / 0.0 || f == -1.0 / 0.0 || f != f)
+	{
+		arg->flags |= F_SPECIAL;
+		return (f);
+	}
+	base = (ft_tolower(arg->conv) == 'a') ? 16.0 : 10.0;
+	if ((sign = (f < 0) ? 1 : 0))
+		f *= -1.0;
+	if ((int)base == 16)
+	{
+		while (f >= base)
+			f /= base;
+		while (f < 1 && f != 0)
+			f *= base;
+	}
+	if (sign)
+		f *= -1.0;
+	return (f);
+}
+
+char		*pf_ftoa(long double f, int precision, float base)
 {
 	char		*num;
-	double		power;
+	long double	power;
 	int			len;
 	int			digit;
 	int			i;
@@ -82,44 +107,4 @@ static char	*pf_ftoa(long double f, int precision, float base)
 		precision = -1;
 	load_mantissa(&num[i], f, precision, base);
 	return (num);
-}
-
-char	*get_float(t_arg *arg)
-{
-	char		*num;
-	long double	f;
-	int			precision;
-	float		base;
-
-	f = (F(F_LD)) ? va_arg(*arg->ap, long double) : va_arg(*arg->ap, double);
-	base = (ft_tolower(arg->conv) == 'a') ? 16.0 : 10.0;
-	if (F(F_PRECISE))
-		precision = arg->precision;
-	else
-		precision = (arg->precision) ? arg->precision : 6;
-	if (f < 0)
-	{
-		arg->prefix[0] = '-';
-		f *= -1.0;
-	}
-	if (f != f)
-		num = "nan";
-	else if (f == INFINITY)
-		num = "inf";
-	else
-		num = pf_ftoa(f, precision, base);
-	return (num);
-}
-
-int		print_float(t_arg *arg)
-{
-	char	*num;
-
-	num = get_float(arg);
-	if (arg->prefix[0])
-		write(1, arg->prefix, 1);
-	printf("%s\n", num);
-	if (ft_isdigit(*num))
-		free(num);
-	return (1);
 }

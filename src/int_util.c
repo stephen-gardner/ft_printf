@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util.c                                             :+:      :+:    :+:   */
+/*   int_util.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 18:23:34 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/15 16:43:27 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/21 11:53:34 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,4 @@ char		*pf_uitoa(uintmax_t un, int base)
 		un /= base;
 	}
 	return (ft_strdup(&num[++digit]));
-}
-
-int			write_pad(int size, char c)
-{
-	int	i;
-
-	i = 0;
-	while (i++ < size)
-		write(1, &c, 1);
-	return (size);
 }

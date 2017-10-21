@@ -5,7 +5,9 @@ CFLAGS = -Wall -Werror -Wextra -g
 INC = -I inc
 SRC_DIR = src
 SRC = \
-	dispatcher\
+	char_print\
+	float_print\
+	float_util\
 	ft_isdigit\
 	ft_islower\
 	ft_isupper\
@@ -13,6 +15,7 @@ SRC = \
 	ft_memcpy\
 	ft_memset\
 	ft_printf\
+	ft_printf_parser\
 	ft_strdup\
 	ft_strlen\
 	ft_strnlen\
@@ -21,11 +24,8 @@ SRC = \
 	ft_toupper\
 	int_handlers\
 	int_handlers_deprecated\
-	parser\
-	print_char\
-	print_float\
-	print_int\
-	util
+	int_print\
+	int_util
 OBJ_DIR = $(SRC_DIR)/obj
 OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
 

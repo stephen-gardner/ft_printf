@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 12:10:24 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/19 20:52:32 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/21 12:58:43 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,44 @@ enum	e_flags
 	F_PLUS = 1 << 9,
 	F_SPACE = 1 << 10,
 	F_ZERO = 1 << 11,
-	F_HASH = 1 << 12
+	F_HASH = 1 << 12,
+	F_SPECIAL = 1 << 13
 };
 
 /*
-** dispatcher.c
+** char_print.c
 */
 
-int				dispatch(t_arg *arg);
+int				print_char(t_arg *arg);
+int				print_percent(t_arg *arg);
+int				print_str(t_arg *arg);
+
+/*
+** float_print.c
+*/
+
+int				print_float(t_arg *arg);
+
+/*
+** float_util.c
+*/
+
+long double		get_float(t_arg *arg);
+char			*pf_ftoa(long double f, int precision, float base);
 
 /*
 ** ft_printf.c
 */
 
+int				dispatch(t_arg *arg);
 int				ft_printf(const char *format, ...);
+int				write_pad(int size, char c);
+
+/*
+** ft_printf_parser.c
+*/
+
+int				handle_arg(const char **fmt, va_list *ap);
 
 /*
 ** int_handlers.c
@@ -85,41 +109,19 @@ int				print_lo_deprecated(t_arg *arg);
 int				print_lu_deprecated(t_arg *arg);
 
 /*
-** parser.c
-*/
-
-int				handle_arg(const char **fmt, va_list *ap);
-
-/*
-** print_char.c
-*/
-
-int				print_char(t_arg *arg);
-int				print_percent(t_arg *arg);
-int				print_str(t_arg *arg);
-
-/*
-** print_float.c
-*/
-
-char			*get_float(t_arg *arg);
-int				print_float(t_arg *arg);
-
-/*
-** print_int.c
+** int_print.c
 */
 
 int				print_int(t_arg *arg, int base, t_bool is_signed);
 
 /*
-** util.c
+** int_util.c
 */
 
 intmax_t		get_int(t_arg *arg);
 uintmax_t		get_uint(t_arg *arg);
 char			*pf_itoa(t_arg *arg, intmax_t n, int base);
 char			*pf_uitoa(uintmax_t un, int base);
-int				write_pad(int size, char c);
 
 extern const t_conv	g_disp[];
 extern const int	g_disp_count;
