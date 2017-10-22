@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 11:44:30 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 17:28:50 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/21 17:49:51 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,6 @@ static char	*build_float(t_arg *arg)
 		precision = arg->precision;
 	else
 		precision = (arg->precision) ? arg->precision : 6;
-	if (f < 0.0)
-	{
-		*arg->prefix = '-';
-		f *= -1.0;
-	}
 	if (f != f)
 		num = (ft_isupper(arg->conv)) ? "NAN" : "nan";
 	else if (f == 1.0 / 0.0)

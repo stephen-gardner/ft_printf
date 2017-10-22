@@ -6,12 +6,12 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/21 11:46:05 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 17:32:28 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/21 18:16:34 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
+#include <stdio.h>
 static void	round_fstring(char *num, int base)
 {
 	char	*end;
@@ -60,6 +60,11 @@ long double	get_float(t_arg *arg)
 	f = (F(F_LD)) ? va_arg(*arg->ap, long double) : va_arg(*arg->ap, double);
 	if (f == 1.0 / 0.0 || f == -1.0 / 0.0 || f != f)
 		arg->flags |= F_SPECIAL;
+	if (f < 0.0)
+	{
+		*arg->prefix = '-';
+		f *= -1.0;
+	}
 	return (f);
 }
 
@@ -77,14 +82,12 @@ char		*pf_ftoa(long double f, int precision, float base)
 		power *= base;
 	num = (char *)malloc(len + (precision > 0) + precision + 1);
 	i = 0;
-	if (f < 1.0)
-		num[i++] = '0';
-	while (f >= 1.0)
+	while (power > 0.0)
 	{
 		digit = (int)(f / power);
 		num[i++] = BASE_KEY[digit];
 		f -= digit * power;
-		power /= base;
+		power = (power != 1.0) ? power / base : 0.0;
 	}
 	if (precision == 0)
 		precision = -1;
