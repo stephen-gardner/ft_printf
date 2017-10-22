@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 12:10:24 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 12:58:43 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/21 17:30:41 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ char			*pf_ftoa(long double f, int precision, float base);
 
 int				dispatch(t_arg *arg);
 int				ft_printf(const char *format, ...);
+void			set_prefix(t_arg *arg, int base, char *num);
 int				write_pad(int size, char c);
 
 /*

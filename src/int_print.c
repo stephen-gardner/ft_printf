@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 14:28:28 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/16 16:40:42 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/21 16:58:19 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,6 @@ static t_bool	fill_precision(t_arg *arg, char **num)
 	free(*num);
 	*num = filled;
 	return (TRUE);
-}
-
-static void		set_prefix(t_arg *arg, int base, char *num)
-{
-	if (arg->prefix[0])
-		return ;
-	if (F(F_HASH) && (arg->conv == 'p' || *num != '0'))
-	{
-		if (base == 16 || base == 8)
-			arg->prefix[0] = '0';
-		if (base == 16)
-			arg->prefix[1] = arg->conv;
-	}
-	if (ft_tolower(arg->conv) != 'd' && arg->conv != 'i')
-		return ;
-	if (F(F_PLUS))
-		arg->prefix[0] = '+';
-	else if (F(F_SPACE))
-		arg->prefix[0] = ' ';
 }
 
 static char		*build_num(t_arg *arg, int base, t_bool is_signed)

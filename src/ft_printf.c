@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/03 20:27:22 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 12:54:37 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/21 16:58:39 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 const t_conv	g_disp[] = {
 	{ '%', &print_percent },
-	{ 'a', &print_float },
 	{ 'C', &print_char },
 	{ 'c', &print_char },
 	{ 'D', &print_ld_deprecated },
 	{ 'd', &print_d },
+	{ 'F', &print_float },
 	{ 'f', &print_float },
 	{ 'i', &print_d },
 	{ 'O', &print_lo_deprecated },
@@ -75,6 +75,25 @@ int				ft_printf(const char *format, ...)
 	}
 	va_end(ap);
 	return (len);
+}
+
+void			set_prefix(t_arg *arg, int base, char *num)
+{
+	if (*arg->prefix)
+		return ;
+	if (F(F_HASH) && (arg->conv == 'p' || *num != '0'))
+	{
+		if (base == 16 || base == 8)
+			arg->prefix[0] = '0';
+		if (base == 16)
+			arg->prefix[1] = arg->conv;
+	}
+	if (base != 10)
+		return ;
+	if (F(F_PLUS))
+		*arg->prefix = '+';
+	else if (F(F_SPACE))
+		*arg->prefix = ' ';
 }
 
 int				write_pad(int size, char c)

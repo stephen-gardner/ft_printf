@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/21 11:46:05 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 11:59:12 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/21 17:32:28 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,27 +56,10 @@ static void	load_mantissa(char *num, long double f, int precision, float base)
 long double	get_float(t_arg *arg)
 {
 	long double	f;
-	float		base;
-	int			sign;
 
 	f = (F(F_LD)) ? va_arg(*arg->ap, long double) : va_arg(*arg->ap, double);
 	if (f == 1.0 / 0.0 || f == -1.0 / 0.0 || f != f)
-	{
 		arg->flags |= F_SPECIAL;
-		return (f);
-	}
-	base = (ft_tolower(arg->conv) == 'a') ? 16.0 : 10.0;
-	if ((sign = (f < 0) ? 1 : 0))
-		f *= -1.0;
-	if ((int)base == 16)
-	{
-		while (f >= base)
-			f /= base;
-		while (f < 1 && f != 0)
-			f *= base;
-	}
-	if (sign)
-		f *= -1.0;
 	return (f);
 }
 
