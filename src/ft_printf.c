@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/03 20:27:22 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 17:43:20 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 12:42:06 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 const t_conv	g_disp[] = {
 	{ '%', &print_percent },
-	{ 'C', &print_char },
+	{ 'C', &print_wchar },
 	{ 'c', &print_char },
 	{ 'D', &print_ld_deprecated },
 	{ 'd', &print_d },
@@ -25,8 +25,8 @@ const t_conv	g_disp[] = {
 	{ 'O', &print_lo_deprecated },
 	{ 'o', &print_o },
 	{ 'p', &print_p },
-	{ 'S', &print_str },
-	{ 's', &print_str },
+	{ 'S', &print_s },
+	{ 's', &print_s },
 	{ 'U', &print_lu_deprecated },
 	{ 'u', &print_u },
 	{ 'X', &print_x },
@@ -79,6 +79,8 @@ int				ft_printf(const char *format, ...)
 
 void			set_prefix(t_arg *arg, int base, char *num)
 {
+	char	conv;
+
 	if (*arg->prefix)
 		return ;
 	if (F(F_HASH) && (arg->conv == 'p' || *num != '0'))
@@ -88,7 +90,8 @@ void			set_prefix(t_arg *arg, int base, char *num)
 		if (base == 16)
 			arg->prefix[1] = ft_isupper(arg->conv) ? 'X' : 'x';;
 	}
-	if (base != 10)
+	conv = ft_tolower(arg->conv);
+	if (conv != 'd' && conv != 'i' && conv != 'f')
 		return ;
 	if (F(F_PLUS))
 		*arg->prefix = '+';

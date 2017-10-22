@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 12:01:33 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/16 12:58:35 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/21 19:18:09 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,12 @@ static int	find_precision(const char *fmt, t_arg *arg)
 	if (*fmt == '*')
 	{
 		if((arg->precision = va_arg(*arg->ap, int)) < 0)
-			arg->precision = 0;
+			arg->flags ^= F_PRECISE;
 		return (2);
 	}
 	n = 0;
 	while (fmt[n] && ft_isdigit(fmt[n]))
-	{
-		if (fmt[n] == '*')
-			n++;
 		arg->precision = (arg->precision * 10) + (fmt[n++] - '0');
-	}
 	return (1 + n);
 }
 
@@ -94,16 +90,15 @@ static int	find_width(const char *fmt, t_arg *arg)
 	if (*fmt == '*')
 	{
 		if ((arg->width = va_arg(*arg->ap, int)) < 0)
-			arg->width = 0;
+		{
+			arg->flags |= F_MINUS;
+			arg->width *= -1;
+		}
 		return (1);
 	}
 	n = 0;
 	while (fmt[n] && ft_isdigit(fmt[n]))
-	{
-		if (fmt[n] == '*')
-			n++;
 		arg->width = (arg->width * 10) + (fmt[n++] - '0');
-	}
 	return (n);
 }
 

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 11:44:30 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 17:49:51 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/21 21:43:42 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int		print_float(t_arg *arg)
 	out_len += write(1, num, len);
 	if (pad > 0 && F(F_MINUS))
 		out_len += write_pad(pad, ' ');
-	if (ft_isdigit(*num))
+	if (!F(F_SPECIAL))
 		free(num);
 	return (out_len);
 }

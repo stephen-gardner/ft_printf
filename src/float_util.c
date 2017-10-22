@@ -6,12 +6,12 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/21 11:46:05 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 18:16:34 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/21 19:55:24 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h>
+
 static void	round_fstring(char *num, int base)
 {
 	char	*end;

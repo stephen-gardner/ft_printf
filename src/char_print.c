@@ -6,43 +6,19 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 21:55:13 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/14 14:18:14 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 16:09:07 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	fit_wchar(t_byte *str, int len)
+static int		print_str(char *str, t_arg *arg)
 {
-	int	i;
+	int             len;
+	int             pad;
+	int             out_len;
 
-	i = (len - 5 > 0) ? len - 5 : 0;
-	while (str[i])
-	{
-		if (str[i] <= 0xBF && i < len)
-			i++;
-		else if (str[i] >= 0xF0 && str[i] <= 0xFF && i + 3 < len)
-			i += 4;
-		else if (str[i] >= 0xE0 && str[i] <= 0xEF && i + 2 < len)
-			i += 3;
-		else if (str[i] >= 0xC2 && str[i] <= 0xDF && i + 1 < len)
-			i += 2;
-		else
-			return (i);
-	}
-	return (i + 1);
-}
-
-static int	print(char *str, t_arg *arg)
-{
-	int		len;
-	int		pad;
-	int		out_len;
-
-	len = (arg->flags & F_PRECISE)
-		? ft_strnlen(str, arg->precision) : ft_strlen(str);
-	if (arg->flags & F_L || arg->conv == 'S')
-		len = fit_wchar((t_byte *)str, len);
+	len = (F(F_PRECISE)) ? ft_strnlen(str, arg->precision) : ft_strlen(str);
 	pad = arg->width - len;
 	out_len = 0;
 	if (pad > 0 && !F(F_MINUS))
@@ -53,16 +29,56 @@ static int	print(char *str, t_arg *arg)
 	return (out_len);
 }
 
-int			print_char(t_arg *arg)
+static int		print_wstr(wchar_t *ws, t_arg *arg)
 {
-	char	c;
+	t_byte	*out;
+	int		len;
+	int		pad;
 	int		out_len;
 
+	len = ft_wcnlen(ws);
+	if (F(F_PRECISE) && len > arg->precision)
+		len = arg->precision;
+	out = (t_byte *)ft_memalloc(len + 1);
+	ft_wctouc(out, ws, len);
+	pad = arg->width - len;
+	out_len = 0;
+	if (pad > 0 && !F(F_MINUS))
+		out_len += write_pad(pad, ' ');
+	out_len += write(1, out, len);
+	if (pad > 0 && F(F_MINUS))
+		out_len += write_pad(pad, ' ');
+	free(out);
+	return (out_len);
+}
+
+int				print_char(t_arg *arg)
+{
+	t_byte	c;
+	int		out_len;
+
+	if (F(F_L))
+		return (print_wchar(arg));
 	c = (char)va_arg(*arg->ap, int);
 	out_len = 0;
 	if (arg->width > 1 && !F(F_MINUS))
 		out_len += write_pad(arg->width - 1, ' ');
 	out_len += write(1, &c, 1);
+	if (arg->width > 1 && F(F_MINUS))
+		out_len += write_pad(arg->width - 1, ' ');
+	return (out_len);
+}
+
+int				print_wchar(t_arg *arg)
+{
+	t_byte	out;
+	int		out_len;
+	
+	out = (t_byte)va_arg(*arg->ap, wint_t);
+	out_len = 0;
+	if (arg->width > 1 && !F(F_MINUS))
+		out_len += write_pad(arg->width - 1, ' ');
+	out_len += write(1, &out, 1);
 	if (arg->width > 1 && F(F_MINUS))
 		out_len += write_pad(arg->width - 1, ' ');
 	return (out_len);
@@ -75,14 +91,24 @@ int			print_percent(t_arg *arg)
 	str = "%";
 	if (!arg->precision)
 		arg->precision = 1;
-	return (print(str, arg));
+	return (print_str(str, arg));
 }
 
-int			print_str(t_arg *arg)
+int			print_s(t_arg *arg)
 {
 	char	*str;
+	wchar_t	*wstr;
 
-	if (!(str = va_arg(*arg->ap, char *)))
-		str = "(null)";
-	return (print(str, arg));
+	if (F(F_L) || arg->conv == 'S')
+	{
+		if (!(wstr = va_arg(*arg->ap, wchar_t *)))
+			wstr = L"(null)";
+		return (print_wstr(wstr, arg));
+	}
+	else
+	{
+		if (!(str = va_arg(*arg->ap, char *)))
+			str = "(null)";
+		return (print_str(str, arg));
+	}
 }

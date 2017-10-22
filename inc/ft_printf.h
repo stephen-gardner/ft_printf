@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 12:10:24 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 17:30:41 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 15:43:18 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdint.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <wchar.h>
 # include "libft.h"
 
 # define F(f) (arg->flags & f)
@@ -60,8 +61,16 @@ enum	e_flags
 */
 
 int				print_char(t_arg *arg);
+int				print_wchar(t_arg *arg);
 int				print_percent(t_arg *arg);
-int				print_str(t_arg *arg);
+int				print_s(t_arg *arg);
+
+/*
+** char_util.c
+*/
+
+int				ft_utflen(wchar_t *ws, int maxlen);
+void			ft_wctoutf_str(t_byte *dst, wchar_t *src, int maxlen);
 
 /*
 ** float_print.c

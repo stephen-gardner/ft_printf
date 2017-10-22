@@ -1,11 +1,12 @@
 #!/usr/bin/make -f
 NAME = libftprintf.a
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS = -Wall -Werror -Wextra
 INC = -I inc
 SRC_DIR = src
 SRC = \
 	char_print\
+	char_util\
 	float_print\
 	float_util\
 	ft_isdigit\

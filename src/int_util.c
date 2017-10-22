@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/09 18:23:34 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 11:53:34 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/21 18:20:27 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char		*pf_itoa(t_arg *arg, intmax_t n, int base)
 
 	if (n < 0)
 	{
-		arg->prefix[0] = '-';
+		*arg->prefix = '-';
 		un = (uintmax_t)(n * -1);
 	}
 	else
@@ -77,7 +77,7 @@ char		*pf_uitoa(uintmax_t un, int base)
 		num[digit--] = '0';
 	while (un != 0)
 	{
-		num[digit--] = "0123456789abcdef"[un % base];
+		num[digit--] = BASE_KEY[un % base];
 		un /= base;
 	}
 	return (ft_strdup(&num[++digit]));
