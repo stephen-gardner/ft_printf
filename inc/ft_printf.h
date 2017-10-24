@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 12:10:24 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 15:43:18 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 17:08:16 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,16 @@ enum	e_flags
 */
 
 int				print_char(t_arg *arg);
-int				print_wchar(t_arg *arg);
 int				print_percent(t_arg *arg);
-int				print_s(t_arg *arg);
+int				print_str(t_arg *arg);
 
 /*
 ** char_util.c
 */
 
 int				ft_utflen(wchar_t *ws, int maxlen);
+int				ft_wcnlen(wchar_t *ws);
+void			ft_wctouc(t_byte *dst, wchar_t *src, int n);
 void			ft_wctoutf_str(t_byte *dst, wchar_t *src, int maxlen);
 
 /*
