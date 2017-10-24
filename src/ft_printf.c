@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/03 20:27:22 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 22:54:33 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/24 12:15:29 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,27 @@ static int		print_line(const char *format, va_list *ap, t_bool *error)
 int				dispatch(t_arg *arg)
 {
 	t_conv	disp;
+	char	*esc;
+	int		out_len;
 	int		i;
 
+	out_len = 0;
+	if (F(F_ESCAPE))
+	{
+		out_len += write(1, "\x1B[", 2);
+		esc = va_arg(*arg->ap, char *);
+		out_len += write(1, esc, ft_strlen(esc));
+	}
 	i = 0;
 	while (i < g_disp_count)
 	{
 		disp = g_disp[i++];
 		if (arg->conv == disp.specifier)
-			return (disp.handle(arg));
+			out_len += (disp.handle(arg));
 	}
-	return (0);
+	if (F(F_ESCAPE))
+		out_len += write(1, "\x1b[0m", 4);
+	return (out_len);
 }
 
 int				ft_printf(const char *format, ...)

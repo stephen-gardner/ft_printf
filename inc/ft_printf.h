@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 12:10:24 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 22:50:00 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/24 11:56:45 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ enum	e_flags
 	F_ZERO = 1 << 11,
 	F_HASH = 1 << 12,
 	F_SPECIAL = 1 << 13,
-	F_UTF = 1 << 14
+	F_ESCAPE = 1 << 14,
+	F_UTF = 1 << 15
 };
 
 /*

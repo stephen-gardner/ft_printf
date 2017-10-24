@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 12:01:33 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 23:11:51 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/24 11:43:14 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static int	find_flags(const char *fmt, t_arg *arg)
 			arg->flags |= F_ZERO;
 		else if (fmt[n] == '#')
 			arg->flags |= F_HASH;
+		else if (fmt[n] == '&')
+			arg->flags |= F_ESCAPE;
 		else if (fmt[n] == '^')
 			arg->flags |= F_UTF;
 		else
