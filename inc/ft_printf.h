@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 12:10:24 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 17:08:16 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 19:38:39 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ enum	e_flags
 	F_SPACE = 1 << 10,
 	F_ZERO = 1 << 11,
 	F_HASH = 1 << 12,
-	F_SPECIAL = 1 << 13
+	F_SPECIAL = 1 << 13,
+	F_UTF = 1 << 14
 };
 
 /*
@@ -69,9 +70,9 @@ int				print_str(t_arg *arg);
 */
 
 int				ft_utflen(wchar_t *ws, int maxlen);
-int				ft_wcnlen(wchar_t *ws);
-void			ft_wctouc(t_byte *dst, wchar_t *src, int n);
-void			ft_wctoutf_str(t_byte *dst, wchar_t *src, int maxlen);
+int				ft_wclen(wchar_t *ws);
+void			ft_wctouc(char *dst, wchar_t *src, int n);
+void			ft_wctoutf_str(char *dst, wchar_t *src, int maxlen);
 
 /*
 ** float_print.c

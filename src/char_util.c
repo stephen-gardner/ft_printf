@@ -6,13 +6,13 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/22 23:53:24 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 16:09:10 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 19:39:00 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void	ft_wctoutf(t_byte *dst, wchar_t *src, int size)
+static void	ft_wctoutf(char *dst, wchar_t *src, int size)
 {
 	if (!size)
 		*dst = *src;
@@ -46,7 +46,7 @@ int			ft_utflen(wchar_t *ws, int maxlen)
 		else if (*ws <= 0x10FFFF)
 			size = 4;
 		else
-			break ;
+			return (-1);
 		if (len + size > maxlen)
 			break ;
 		len += size;
@@ -59,13 +59,17 @@ int			ft_utflen(wchar_t *ws, int maxlen)
 ** For C/POSIX locale
 */
 
-int			ft_wcnlen(wchar_t *ws)
+int			ft_wclen(wchar_t *ws)
 {
 	int	len;
 
 	len = 0;
-	while (ws[len] && ws[len] < 0x100)
+	while (ws[len])
+	{
+		if (ws[len] > 0xFF)
+			return (-1);
 		len++;
+	}
 	return (len);
 }
 
@@ -73,29 +77,28 @@ int			ft_wcnlen(wchar_t *ws)
 ** For C/POSIX locale
 */
 
-void		ft_wctouc(t_byte *dst, wchar_t *src, int n)
+void		ft_wctouc(char *dst, wchar_t *src, int n)
 {
 	int	i;
 
 	i = 0;
 	while (i < n)
 	{
-		dst[i] = (t_byte)src[i];
+		dst[i] = (char)src[i];
 		i++;
 	}
 }
 
-void		ft_wctoutf_str(t_byte *dst, wchar_t *src, int maxlen)
+void		ft_wctoutf_str(char *dst, wchar_t *src, int maxlen)
 {
 	int	len;
 	int	size;
-
 	len = 0;
 	while (*src)
 	{
 		if (*src <= 0x7F)
 			size = 1;
-		if (*src <= 0x7FF)
+		else if (*src <= 0x7FF)
 			size = 2;
 		else if (*src <= 0xFFFF)
 			size = 3;
@@ -105,8 +108,8 @@ void		ft_wctoutf_str(t_byte *dst, wchar_t *src, int maxlen)
 			break ;
 		if (len + size > maxlen)
 			break ;
+		ft_wctoutf(dst, src++, size - 1);
 		dst += size;
 		len += size;
-		ft_wctoutf(dst, src++, size - 1);
 	}
 }
