@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/02 12:10:24 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 19:38:39 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 22:50:00 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ int				print_str(t_arg *arg);
 ** char_util.c
 */
 
-int				ft_utflen(wchar_t *ws, int maxlen);
-int				ft_wclen(wchar_t *ws);
+int				ft_utflen(wchar_t *ws, int n);
+int				ft_wcnlen(wchar_t *ws, int n);
 void			ft_wctouc(char *dst, wchar_t *src, int n);
-void			ft_wctoutf_str(char *dst, wchar_t *src, int maxlen);
+void			ft_wctoutf_str(char *dst, wchar_t *src, int n);
 
 /*
 ** float_print.c
@@ -100,7 +100,7 @@ int				write_pad(int size, char c);
 ** ft_printf_parser.c
 */
 
-int				handle_arg(const char **fmt, va_list *ap);
+int				handle_arg(const char **fmt, va_list *ap, int len);
 
 /*
 ** int_handlers.c

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 21:55:13 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 19:55:45 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 22:50:52 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,10 @@ static int	get_wclen(wchar_t *ws, t_arg *arg)
 
 	if (F(F_UTF))
 		len = (F(F_PRECISE)) ? ft_utflen(ws, arg->precision)
-				: ft_utflen(ws, 0x7FFFFFFF);
+			: ft_utflen(ws, 0x7FFFFFFF);
 	else
-	{
-		len = ft_wclen(ws);
-		if (F(F_PRECISE) && len > arg->precision)
-			len = arg->precision;
-	}
+		len = (F(F_PRECISE)) ? ft_wcnlen(ws, arg->precision)
+			: ft_wcnlen(ws, 0x7FFFFFFF);
 	return (len);
 }
 
@@ -64,9 +61,7 @@ int			print_str(t_arg *arg)
 	}
 	if (!(out = (char *)va_arg(*arg->ap, char *)))
 		out = "(null)";
-	len = ft_strlen(out);
-	if (F(F_PRECISE) && len > arg->precision)
-		len = arg->precision;
+	len = (F(F_PRECISE)) ? ft_strnlen(out, arg->precision) : ft_strlen(out);
 	return ((out_len = print(out, arg, len)));
 }
 

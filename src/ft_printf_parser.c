@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 12:01:33 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 18:15:56 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 22:46:51 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,11 @@ static int	find_width(const char *fmt, t_arg *arg)
 	return (n);
 }
 
-int			handle_arg(const char **fmt, va_list *ap)
+int			handle_arg(const char **fmt, va_list *ap, int len)
 {
 	static t_arg	arg;
 	int				arg_len;
+	int				*n;
 
 	ft_memset((void *)&arg, 0, sizeof(arg));
 	arg.ap = ap;
@@ -117,6 +118,12 @@ int			handle_arg(const char **fmt, va_list *ap)
 	*fmt += find_length(*fmt, &arg);
 	arg.conv = **fmt;
 	(*fmt)++;
+	if (arg.conv == 'n')
+	{
+		n = va_arg(*ap, int *);
+		*n = len;
+		return (0);
+	}
 	arg_len = dispatch(&arg);
 	return (arg_len);
 }

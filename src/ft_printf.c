@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/03 20:27:22 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 17:06:33 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 22:38:21 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,32 @@ const t_conv	g_disp[] = {
 };
 const int		g_disp_count = sizeof(g_disp) / sizeof(t_conv);
 
+static int		print_line(const char *format, va_list *ap, t_bool *error)
+{
+	const char	*end;
+	int			len;
+	int			arg_len;
+
+	len = 0;
+	while (*format)
+	{
+		end = format;
+		while (*end && *end != '%')
+			end++;
+		len += write(1, format, end - format);
+		if (*end == '%')
+		{
+			end++;
+			if ((arg_len = handle_arg(&end, ap, len)) < 0)
+				*error = TRUE;
+			else
+				len += arg_len;
+		}
+		format = end;
+	}
+	return (len);
+}
+
 int				dispatch(t_arg *arg)
 {
 	t_conv	disp;
@@ -51,30 +77,15 @@ int				dispatch(t_arg *arg)
 
 int				ft_printf(const char *format, ...)
 {
-	va_list		ap;
-	const char	*end;
-	int			len;
-	int			arg_len;
+	va_list	ap;
+	int		len;
+	t_bool	error;
 
 	va_start(ap, format);
-	len = 0;
-	while (*format)
-	{
-		end = format;
-		while (*end && *end != '%')
-			end++;
-		len += write(1, format, end - format);
-		if (*end == '%')
-		{
-			end++;
-			if ((arg_len = handle_arg(&end, &ap)) < 0)
-				return (-1);
-			len += arg_len;
-		}
-		format = end;
-	}
+	error = FALSE;
+	len = print_line(format, &ap, &error);
 	va_end(ap);
-	return (len);
+	return ((error) ? -1 : len);
 }
 
 void			set_prefix(t_arg *arg, int base, char *num)

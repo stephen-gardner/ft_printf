@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/22 23:53:24 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 19:39:00 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 21:15:10 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	ft_wctoutf(char *dst, wchar_t *src, int size)
 	}
 }
 
-int			ft_utflen(wchar_t *ws, int maxlen)
+int			ft_utflen(wchar_t *ws, int n)
 {
 	int	len;
 	int	size;
@@ -47,7 +47,7 @@ int			ft_utflen(wchar_t *ws, int maxlen)
 			size = 4;
 		else
 			return (-1);
-		if (len + size > maxlen)
+		if (len + size > n)
 			break ;
 		len += size;
 		ws++;
@@ -59,12 +59,12 @@ int			ft_utflen(wchar_t *ws, int maxlen)
 ** For C/POSIX locale
 */
 
-int			ft_wclen(wchar_t *ws)
+int			ft_wcnlen(wchar_t *ws, int n)
 {
 	int	len;
 
 	len = 0;
-	while (ws[len])
+	while (ws[len] && len < n)
 	{
 		if (ws[len] > 0xFF)
 			return (-1);
@@ -89,7 +89,7 @@ void		ft_wctouc(char *dst, wchar_t *src, int n)
 	}
 }
 
-void		ft_wctoutf_str(char *dst, wchar_t *src, int maxlen)
+void		ft_wctoutf_str(char *dst, wchar_t *src, int n)
 {
 	int	len;
 	int	size;
@@ -106,7 +106,7 @@ void		ft_wctoutf_str(char *dst, wchar_t *src, int maxlen)
 			size = 4;
 		else
 			break ;
-		if (len + size > maxlen)
+		if (len + size > n)
 			break ;
 		ft_wctoutf(dst, src++, size - 1);
 		dst += size;
