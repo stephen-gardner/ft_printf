@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 12:01:33 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 22:46:51 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 23:11:51 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static int	find_precision(const char *fmt, t_arg *arg)
 	fmt++;
 	if (*fmt == '*')
 	{
-		if((arg->precision = va_arg(*arg->ap, int)) < 0)
+		if ((arg->precision = va_arg(*arg->ap, int)) < 0)
 			arg->flags ^= F_PRECISE;
 		return (2);
 	}
@@ -107,7 +107,6 @@ static int	find_width(const char *fmt, t_arg *arg)
 int			handle_arg(const char **fmt, va_list *ap, int len)
 {
 	static t_arg	arg;
-	int				arg_len;
 	int				*n;
 
 	ft_memset((void *)&arg, 0, sizeof(arg));
@@ -124,6 +123,5 @@ int			handle_arg(const char **fmt, va_list *ap, int len)
 		*n = len;
 		return (0);
 	}
-	arg_len = dispatch(&arg);
-	return (arg_len);
+	return (dispatch(&arg));
 }

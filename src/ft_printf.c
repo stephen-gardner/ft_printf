@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/03 20:27:22 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 22:38:21 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 22:54:33 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void			set_prefix(t_arg *arg, int base, char *num)
 		if (base == 16 || base == 8)
 			arg->prefix[0] = '0';
 		if (base == 16)
-			arg->prefix[1] = ft_isupper(arg->conv) ? 'X' : 'x';;
+			arg->prefix[1] = ft_isupper(arg->conv) ? 'X' : 'x';
 	}
 	conv = ft_tolower(arg->conv);
 	if (conv != 'd' && conv != 'i' && conv != 'f')

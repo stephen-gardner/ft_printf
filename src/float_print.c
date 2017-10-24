@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 11:44:30 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 21:43:42 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 22:53:47 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static char	*build_float(t_arg *arg)
 	return (num);
 }
 
-int		print_float(t_arg *arg)
+int			print_float(t_arg *arg)
 {
 	char	*num;
 	int		len;

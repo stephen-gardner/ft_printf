@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/22 23:53:24 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 21:15:10 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/23 22:54:06 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void		ft_wctoutf_str(char *dst, wchar_t *src, int n)
 {
 	int	len;
 	int	size;
+
 	len = 0;
 	while (*src)
 	{
