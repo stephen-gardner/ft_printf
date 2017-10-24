@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/03 20:27:22 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/24 12:15:29 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/24 13:53:30 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,10 +123,12 @@ void			set_prefix(t_arg *arg, int base, char *num)
 
 int				write_pad(int size, char c)
 {
-	int	i;
+	char	*pad;
 
-	i = 0;
-	while (i++ < size)
-		write(1, &c, 1);
+	if (size < 1 || !(pad = (char *)malloc(size)))
+		return (0);
+	ft_memset(pad, c, size);
+	write(1, pad, size);
+	free(pad);
 	return (size);
 }

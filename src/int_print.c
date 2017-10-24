@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 14:28:28 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 16:58:19 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/24 13:06:32 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static t_bool	fill_precision(t_arg *arg, char **num)
 
 	if (!F(F_PRECISE) || (len = ft_strlen(*num)) >= arg->precision)
 		return (TRUE);
-	if (!(filled = (char *)malloc(arg->precision)))
+	if (!(filled = (char *)malloc(arg->precision + 1)))
 		return (FALSE);
 	ft_memset((void *)filled, '0', arg->precision - len);
 	ft_memcpy((void *)(filled + (arg->precision - len)), (void *)*num, len);
@@ -70,15 +70,15 @@ int				print_int(t_arg *arg, int base, t_bool is_signed)
 	prefix_len = ft_strlen(arg->prefix);
 	out_len = 0;
 	pad = arg->width - len - prefix_len;
-	if (pad > 0 && !F(F_MINUS) && (!F(F_ZERO) || F(F_PRECISE)))
+	if (!F(F_MINUS) && (!F(F_ZERO) || F(F_PRECISE)))
 		out_len += write_pad(pad, ' ');
 	out_len += write(1, arg->prefix, prefix_len);
-	if (pad > 0 && F(F_ZERO) && !F((F_MINUS | F_PRECISE)))
+	if (F(F_ZERO) && !F((F_MINUS | F_PRECISE)))
 		out_len += write_pad(pad, '0');
 	if (arg->conv == 'X')
 		ft_strupcase(num);
 	out_len += write(1, num, len);
-	if (pad > 0 && F(F_MINUS))
+	if (F(F_MINUS))
 		out_len += write_pad(pad, ' ');
 	free(num);
 	return (out_len);

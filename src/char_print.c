@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 21:55:13 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/23 22:50:52 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/24 12:49:54 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ static int	print(char *s, t_arg *arg, int len)
 
 	out_len = 0;
 	pad = arg->width - len;
-	if (pad > 0 && !F(F_MINUS))
+	if (!F(F_MINUS))
 		out_len += write_pad(pad, ' ');
 	out_len += write(1, s, len);
-	if (pad > 0 && F(F_MINUS))
+	if (F(F_MINUS))
 		out_len += write_pad(pad, ' ');
 	return (out_len);
 }
