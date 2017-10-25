@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 21:55:13 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/24 12:49:54 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/24 18:08:50 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int			print_str(t_arg *arg)
 
 int			print_char(t_arg *arg)
 {
-	wchar_t	wc;
+	wchar_t	wc[2];
 	char	c;
 	char	*mbs;
 	int		mb_len;
@@ -75,11 +75,12 @@ int			print_char(t_arg *arg)
 
 	if (F(F_UTF) && (F(F_L) || arg->conv == 'C'))
 	{
-		wc = (wchar_t)va_arg(*arg->ap, wint_t);
+		wc[0] = (wchar_t)va_arg(*arg->ap, wint_t);
+		wc[1] = L'\0';
 		if (!(mbs = (char *)ft_memalloc(sizeof(wchar_t) + 1)))
 			return (-1);
-		mb_len = ft_utflen(&wc, sizeof(wchar_t));
-		ft_wctoutf_str(mbs, &wc, mb_len);
+		mb_len = ft_utflen(&wc[0], sizeof(wchar_t));
+		ft_wctoutf_str(mbs, &wc[0], mb_len);
 		out_len = print(mbs, arg, mb_len);
 		free(mbs);
 	}
