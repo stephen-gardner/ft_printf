@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 14:28:28 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/24 13:06:32 by sgardner         ###   ########.fr       */
+/*   Updated: 2017/10/24 20:22:30 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static t_bool	fill_precision(t_arg *arg, char **num)
 	char	*filled;
 	int		len;
 
+	arg->precision -= ft_tolower(arg->conv) == 'o' && (*arg->prefix == '0');
 	if (!F(F_PRECISE) || (len = ft_strlen(*num)) >= arg->precision)
 		return (TRUE);
 	if (!(filled = (char *)malloc(arg->precision + 1)))
@@ -50,9 +51,11 @@ static char		*build_num(t_arg *arg, int base, t_bool is_signed)
 			return (ft_strdup(""));
 		num = pf_uitoa(un, base);
 	}
-	if (!num || !fill_precision(arg, &num))
+	if (!num)
 		return (NULL);
 	set_prefix(arg, base, num);
+	if (!fill_precision(arg, &num))
+		return (NULL);
 	return (num);
 }
 
