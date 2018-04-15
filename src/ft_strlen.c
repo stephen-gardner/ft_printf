@@ -6,17 +6,11 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 01:19:27 by sgardner          #+#    #+#             */
-/*   Updated: 2017/09/20 13:20:14 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/03/19 17:30:41 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-/*
-** ASSIGNMENT:
-** Re-code similarly named libc function.
-** This function lacks optimization.
-*/
 
 size_t	ft_strlen(const char *s)
 {
@@ -24,6 +18,6 @@ size_t	ft_strlen(const char *s)
 
 	len = 0;
 	while (s[len])
-		len++;
+		++len;
 	return (len);
 }

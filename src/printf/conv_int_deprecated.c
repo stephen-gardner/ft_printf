@@ -1,39 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   int_handlers.c                                     :+:      :+:    :+:   */
+/*   conv_int_deprecated.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/09 18:31:17 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/15 14:16:07 by sgardner         ###   ########.fr       */
+/*   Created: 2018/04/14 21:49:01 by sgardner          #+#    #+#             */
+/*   Updated: 2018/04/15 02:32:56 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int			print_d(t_arg *arg)
+t_bool	conv_ld_deprecated(t_buff *buff, t_arg *arg)
 {
-	return (print_int(arg, 10, TRUE));
+	arg->flags = ((arg->flags >> 7) << 7) | F_L;
+	return (add_num(buff, arg, 10, TRUE));
 }
 
-int			print_o(t_arg *arg)
+t_bool	conv_lo_deprecated(t_buff *buff, t_arg *arg)
 {
-	return (print_int(arg, 8, FALSE));
+	arg->flags = ((arg->flags >> 7) << 7) | F_L;
+	return (add_num(buff, arg, 8, FALSE));
 }
 
-int			print_p(t_arg *arg)
+t_bool	conv_lu_deprecated(t_buff *buff, t_arg *arg)
 {
-	arg->flags |= F_HASH;
-	return (print_int(arg, 16, FALSE));
-}
-
-int			print_u(t_arg *arg)
-{
-	return (print_int(arg, 10, FALSE));
-}
-
-int			print_x(t_arg *arg)
-{
-	return (print_int(arg, 16, FALSE));
+	arg->flags = ((arg->flags >> 7) << 7) | F_L;
+	return (add_num(buff, arg, 10, FALSE));
 }

@@ -1,15 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   float_util.c                                       :+:      :+:    :+:   */
+/*   conv_float.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/21 11:46:05 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/21 19:55:24 by sgardner         ###   ########.fr       */
+/*   Created: 2018/04/15 02:34:13 by sgardner          #+#    #+#             */
+/*   Updated: 2018/04/15 04:03:41 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "ft_printf.h"
 
 static void	round_fstring(char *num, int base)
@@ -17,14 +18,13 @@ static void	round_fstring(char *num, int base)
 	char	*end;
 
 	end = num;
-	if (*num >= BASE_KEY[base / 2])
+	if (*num-- >= BASE_KEY[base / 2])
 	{
-		num--;
 		while (*num == BASE_KEY[base - 1] || *num == '.')
 		{
 			if (*num != '.')
 				*num = '0';
-			num--;
+			--num;
 		}
 		*num = BASE_KEY[(*num - '0') + 1];
 	}
@@ -41,7 +41,7 @@ static void	load_mantissa(char *num, long double f, int precision, float base)
 	else
 	{
 		*num++ = '.';
-		precision++;
+		++precision;
 		while (precision--)
 		{
 			f *= base;
@@ -53,22 +53,7 @@ static void	load_mantissa(char *num, long double f, int precision, float base)
 	}
 }
 
-long double	get_float(t_arg *arg)
-{
-	long double	f;
-
-	f = (F(F_LD)) ? va_arg(*arg->ap, long double) : va_arg(*arg->ap, double);
-	if (f == 1.0 / 0.0 || f == -1.0 / 0.0 || f != f)
-		arg->flags |= F_SPECIAL;
-	if (f < 0.0)
-	{
-		*arg->prefix = '-';
-		f *= -1.0;
-	}
-	return (f);
-}
-
-char		*pf_ftoa(long double f, int precision, float base)
+static char	*ftoa(long double f, int precision, float base, t_bool negative)
 {
 	char		*num;
 	long double	power;
@@ -80,8 +65,10 @@ char		*pf_ftoa(long double f, int precision, float base)
 	len = 2;
 	while (power < f / base && len++)
 		power *= base;
-	num = (char *)malloc(len + (precision > 0) + precision + 1);
+	num = ft_memalloc(negative + len + (precision > 0) + precision + 1);
 	i = 0;
+	if (negative)
+		num[i++] = '-';
 	while (power > 0.0)
 	{
 		digit = (int)(f / power);
@@ -89,8 +76,53 @@ char		*pf_ftoa(long double f, int precision, float base)
 		f -= digit * power;
 		power = (power != 1.0) ? power / base : 0.0;
 	}
-	if (precision == 0)
-		precision = -1;
+	if (!precision)
+		--precision;
 	load_mantissa(&num[i], f, precision, base);
 	return (num);
+}
+
+static char	*build_float(t_buff *buff, t_arg *arg)
+{
+	long double	f;
+	char		*num;
+	int			precision;
+
+	f = (F(F_LD)) ? va_arg(buff->ap, long double) : va_arg(buff->ap, double);
+	precision = (F(F_PRECISE) || arg->precision) ? arg->precision : 6;
+	if (f != f)
+		num = ft_strdup((IS_UPPER(arg->conv)) ? "NAN" : "nan");
+	else if (f == 1.0 / 0.0)
+		num = ft_strdup((IS_UPPER(arg->conv)) ? "INF" : "inf");
+	else
+		num = ftoa((f < 0) ? -f : f, precision, 10.0, f < 0);
+	return (num);
+}
+
+t_bool		conv_float(t_buff *buff, t_arg *arg)
+{
+	char	*num;
+	char	*prefix;
+	char	*res;
+	int		len;
+	int		prefix_len;
+
+	if (!(num = build_float(buff, arg)))
+		return (FALSE);
+	len = LEN(num);
+	prefix = get_prefix(arg, num, 10);
+	if ((prefix_len = LEN(prefix)))
+	{
+		if (!(res = ft_memalloc(prefix_len + len)))
+		{
+			free(num);
+			return (FALSE);
+		}
+		ft_memcpy(res, prefix, prefix_len);
+		ft_memcpy(res + prefix_len, num, len);
+		free(num);
+	}
+	else
+		res = num;
+	return (add_str(buff, arg, res, len));
 }

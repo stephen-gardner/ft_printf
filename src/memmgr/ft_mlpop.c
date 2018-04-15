@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_toupper.c                                       :+:      :+:    :+:   */
+/*   ft_mlpop.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/16 01:23:45 by sgardner          #+#    #+#             */
-/*   Updated: 2017/01/04 08:20:16 by sgardner         ###   ########.fr       */
+/*   Created: 2017/12/02 17:25:01 by sgardner          #+#    #+#             */
+/*   Updated: 2017/12/06 00:30:37 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stdlib.h>
+#include "ft_memmgr.h"
 
-/*
-** ASSIGNMENT:
-** Re-code similarly named libc function.
-*/
-
-int	ft_toupper(int c)
+t_mlink	*ft_mlpop(t_mchain *mchain)
 {
-	return ((ft_islower(c)) ? c - ' ' : c);
+	t_mlink		*next;
+
+	if (!mchain->start)
+		return (NULL);
+	if (mchain->end == mchain->start)
+		mchain->end = NULL;
+	next = mchain->start->next;
+	free(mchain->start->ptr);
+	free(mchain->start);
+	mchain->link_count--;
+	return ((mchain->start = next));
 }

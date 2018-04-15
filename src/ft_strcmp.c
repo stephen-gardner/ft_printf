@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/16 01:15:03 by sgardner          #+#    #+#             */
-/*   Updated: 2018/03/19 16:40:26 by sgardner         ###   ########.fr       */
+/*   Created: 2016/12/16 01:17:33 by sgardner          #+#    #+#             */
+/*   Updated: 2018/03/19 16:43:18 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memcpy(void *s1, const void *s2, size_t n)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	const t_byte	*src;
-	t_byte			*dst;
+	const t_byte	*b1;
+	const t_byte	*b2;
 	size_t			i;
 
-	src = (const t_byte *)s2;
-	dst = (t_byte *)s1;
+	b1 = (const t_byte *)s1;
+	b2 = (const t_byte *)s2;
 	i = 0;
-	while (i < n)
+	while (b1[i])
 	{
-		dst[i] = src[i];
+		if (b1[i] != b2[i])
+			break ;
 		++i;
 	}
-	return (s1);
+	return (b1[i] - b2[i]);
 }

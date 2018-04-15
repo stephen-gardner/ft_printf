@@ -6,18 +6,11 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 01:15:29 by sgardner          #+#    #+#             */
-/*   Updated: 2017/01/14 20:52:03 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/12 21:06:52 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-/*
-** ASSIGNMENT:
-** Re-code similarly named libc function.
-** This function lacks optimizations such as word copying and
-**  vectorization.
-*/
 
 void	*ft_memset(void *s, int c, size_t n)
 {

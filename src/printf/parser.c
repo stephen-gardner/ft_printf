@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_parser.c                                 :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/04 12:01:33 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/24 11:43:14 by sgardner         ###   ########.fr       */
+/*   Created: 2018/04/12 20:21:03 by sgardner          #+#    #+#             */
+/*   Updated: 2018/04/15 01:13:22 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	find_flags(const char *fmt, t_arg *arg)
+static int	find_flags(t_buff *buff, t_arg *arg, const char *fmt)
 {
 	int	n;
 
@@ -30,17 +30,18 @@ static int	find_flags(const char *fmt, t_arg *arg)
 		else if (fmt[n] == '#')
 			arg->flags |= F_HASH;
 		else if (fmt[n] == '&')
+		{
 			arg->flags |= F_ESCAPE;
-		else if (fmt[n] == '^')
-			arg->flags |= F_UTF;
+			arg->esc = va_arg(buff->ap, char *);
+		}
 		else
 			break ;
-		n++;
+		++n;
 	}
 	return (n);
 }
 
-static int	find_length(const char *fmt, t_arg *arg)
+static int	find_length(t_arg *arg, const char *fmt)
 {
 	if (*fmt == 'h' && *(fmt + 1) == 'h')
 	{
@@ -67,33 +68,35 @@ static int	find_length(const char *fmt, t_arg *arg)
 	return (1);
 }
 
-static int	find_precision(const char *fmt, t_arg *arg)
+static int	find_precision(t_buff *buff, t_arg *arg, const char *fmt)
 {
 	int	n;
 
 	if (*fmt != '.')
 		return (0);
 	arg->flags |= F_PRECISE;
-	fmt++;
-	if (*fmt == '*')
+	if (*(++fmt) == '*')
 	{
-		if ((arg->precision = va_arg(*arg->ap, int)) < 0)
+		if ((arg->precision = va_arg(buff->ap, int)) < 0)
+		{
 			arg->flags ^= F_PRECISE;
+			arg->precision = 0;
+		}
 		return (2);
 	}
 	n = 0;
-	while (fmt[n] && ft_isdigit(fmt[n]))
+	while (fmt[n] && IS_DIGIT(fmt[n]))
 		arg->precision = (arg->precision * 10) + (fmt[n++] - '0');
 	return (1 + n);
 }
 
-static int	find_width(const char *fmt, t_arg *arg)
+static int	find_width(t_buff *buff, t_arg *arg, const char *fmt)
 {
 	int	n;
 
 	if (*fmt == '*')
 	{
-		if ((arg->width = va_arg(*arg->ap, int)) < 0)
+		if ((arg->width = va_arg(buff->ap, int)) < 0)
 		{
 			arg->flags |= F_MINUS;
 			arg->width *= -1;
@@ -101,29 +104,26 @@ static int	find_width(const char *fmt, t_arg *arg)
 		return (1);
 	}
 	n = 0;
-	while (fmt[n] && ft_isdigit(fmt[n]))
+	while (fmt[n] && IS_DIGIT(fmt[n]))
 		arg->width = (arg->width * 10) + (fmt[n++] - '0');
 	return (n);
 }
 
-int			handle_arg(const char **fmt, va_list *ap, int len)
+t_bool		parse_conv(t_buff *buff, const char **fmt)
 {
-	static t_arg	arg;
-	int				*n;
+	t_arg	arg;
 
-	ft_memset((void *)&arg, 0, sizeof(arg));
-	arg.ap = ap;
-	*fmt += find_flags(*fmt, &arg);
-	*fmt += find_width(*fmt, &arg);
-	*fmt += find_precision(*fmt, &arg);
-	*fmt += find_length(*fmt, &arg);
+	ft_memset(&arg, 0, sizeof(t_arg));
+	*fmt += find_flags(buff, &arg, *fmt);
+	*fmt += find_width(buff, &arg, *fmt);
+	*fmt += find_precision(buff, &arg, *fmt);
+	*fmt += find_length(&arg, *fmt);
 	arg.conv = **fmt;
-	(*fmt)++;
+	++(*fmt);
 	if (arg.conv == 'n')
 	{
-		n = va_arg(*ap, int *);
-		*n = len;
-		return (0);
+		conv_n(buff, &arg);
+		return (TRUE);
 	}
-	return (dispatch(&arg));
+	return (build_arg(buff, &arg));
 }

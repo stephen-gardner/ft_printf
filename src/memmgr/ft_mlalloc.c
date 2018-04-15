@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_islower.c                                       :+:      :+:    :+:   */
+/*   ft_mlalloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/16 01:13:12 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/15 13:07:49 by sgardner         ###   ########.fr       */
+/*   Created: 2017/12/03 00:42:57 by sgardner          #+#    #+#             */
+/*   Updated: 2017/12/04 21:49:40 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stdlib.h>
+#include "ft_memmgr.h"
 
-/*
-** CUSTOM:
-** Re-production of similarly named libc function.
-** This function disregards locale.
-*/
-
-t_bool	ft_islower(int c)
+void	*ft_mlalloc(t_mchain *mchain, size_t size)
 {
-	return ((unsigned int)(c - 'a') < 26);
+	void	*ptr;
+
+	if (!(ptr = ft_memalloc(size)))
+		return (NULL);
+	if (!ft_mladd(mchain, ptr, size))
+	{
+		free(ptr);
+		return (NULL);
+	}
+	return (ptr);
 }

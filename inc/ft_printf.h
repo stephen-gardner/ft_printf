@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/02 12:10:24 by sgardner          #+#    #+#             */
-/*   Updated: 2017/10/24 11:56:45 by sgardner         ###   ########.fr       */
+/*   Created: 2018/04/11 22:42:25 by sgardner          #+#    #+#             */
+/*   Updated: 2018/04/15 07:11:13 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,14 @@
 # define FT_PRINTF_H
 # include <stdarg.h>
 # include <stdint.h>
-# include <stdlib.h>
-# include <unistd.h>
 # include <wchar.h>
+# include "ft_memmgr.h"
 # include "libft.h"
 
-# define F(f) (arg->flags & f)
-# define BASE_KEY "0123456789abcdef"
+# define F(x)		(arg->flags & (x))
+# define BASE_KEY	"0123456789abcdef"
 
-typedef struct	s_arg
-{
-	va_list	*ap;
-	char	conv;
-	char	prefix[3];
-	int		flags;
-	int		width;
-	int		precision;
-}				t_arg;
-
-typedef struct	s_conv
-{
-	char	specifier;
-	int		(*handle)(t_arg *);
-}				t_conv;
-
-enum	e_flags
+enum			e_pfflags
 {
 	F_H = 1,
 	F_HH = 1 << 1,
@@ -53,88 +36,115 @@ enum	e_flags
 	F_SPACE = 1 << 10,
 	F_ZERO = 1 << 11,
 	F_HASH = 1 << 12,
-	F_SPECIAL = 1 << 13,
-	F_ESCAPE = 1 << 14,
-	F_UTF = 1 << 15
+	F_ESCAPE = 1 << 13
 };
 
+typedef struct	s_arg
+{
+	char		*esc;
+	int			flags;
+	int			width;
+	int			precision;
+	char		conv;
+}				t_arg;
+
+typedef struct	s_buff
+{
+	t_mchain	*mchain;
+	va_list		ap;
+	size_t		len;
+}				t_buff;
+
+typedef struct	s_conv
+{
+	char		specifier;
+	t_bool		(*handle)(t_buff *, t_arg *);
+}				t_conv;
+
 /*
-** char_print.c
+** conv_char.c
 */
 
-int				print_char(t_arg *arg);
-int				print_percent(t_arg *arg);
-int				print_str(t_arg *arg);
+t_bool			conv_char(t_buff *buff, t_arg *arg);
+t_bool			conv_str(t_buff *buff, t_arg *arg);
 
 /*
-** char_util.c
+** conv_float.c
 */
 
-int				ft_utflen(wchar_t *ws, int n);
-int				ft_wcnlen(wchar_t *ws, int n);
-void			ft_wctouc(char *dst, wchar_t *src, int n);
-void			ft_wctoutf_str(char *dst, wchar_t *src, int n);
+t_bool			conv_float(t_buff *buf, t_arg *arg);
 
 /*
-** float_print.c
+** conv_int.c
 */
 
-int				print_float(t_arg *arg);
+t_bool			conv_d(t_buff *buff, t_arg *arg);
+t_bool			conv_o(t_buff *buff, t_arg *arg);
+t_bool			conv_p(t_buff *buff, t_arg *arg);
+t_bool			conv_u(t_buff *buff, t_arg *arg);
+t_bool			conv_x(t_buff *buff, t_arg *arg);
 
 /*
-** float_util.c
+** conv_int_deprecated.c
 */
 
-long double		get_float(t_arg *arg);
-char			*pf_ftoa(long double f, int precision, float base);
+t_bool			conv_ld_deprecated(t_buff *buff, t_arg *arg);
+t_bool			conv_lo_deprecated(t_buff *buff, t_arg *arg);
+t_bool			conv_lu_deprecated(t_buff *buff, t_arg *arg);
+
+/*
+** conv_misc.c
+*/
+
+void			conv_n(t_buff *buff, t_arg *arg);
+t_bool			conv_percent(t_buff *buff, t_arg *arg);
+
+/*
+** conv_wchar.c
+*/
+
+t_bool			conv_wchar(t_buff *buff, t_arg *arg);
+t_bool			conv_wstr(t_buff *buff, t_arg *arg);
 
 /*
 ** ft_printf.c
 */
 
-int				dispatch(t_arg *arg);
-int				ft_printf(const char *format, ...);
-void			set_prefix(t_arg *arg, int base, char *num);
-int				write_pad(int size, char c);
+int				ft_asprintf(char **ret, const char *fmt, ...);
+int				ft_dprintf(int fd, const char *fmt, ...);
+int				ft_printf(const char *fmt, ...);
+int				ft_snprintf(char *str, size_t size, const char *fmt, ...);
+int				ft_sprintf(char *str, const char *fmt, ...);
 
 /*
-** ft_printf_parser.c
+** parser.c
 */
 
-int				handle_arg(const char **fmt, va_list *ap, int len);
+t_bool			build_arg(t_buff *buff, t_arg *arg);
+t_bool			parse_conv(t_buff *buff, const char **fmt);
 
 /*
-** int_handlers.c
+** process.c
 */
 
-int				print_d(t_arg *arg);
-int				print_o(t_arg *arg);
-int				print_p(t_arg *arg);
-int				print_u(t_arg *arg);
-int				print_x(t_arg *arg);
+int				process(char **ret, size_t size, const char *fmt, va_list ap);
 
 /*
-** int_handlers_deprecated.c
+** util.c
 */
 
-int				print_ld_deprecated(t_arg *arg);
-int				print_lo_deprecated(t_arg *arg);
-int				print_lu_deprecated(t_arg *arg);
+t_bool			add_num(t_buff *buff, t_arg *arg, int base, t_bool is_signed);
+t_bool			add_str(t_buff *buff, t_arg *arg, char *str, int len);
 
 /*
-** int_print.c
+** util_int.c
 */
 
-int				print_int(t_arg *arg, int base, t_bool is_signed);
-
-/*
-** int_util.c
-*/
-
-intmax_t		get_int(t_arg *arg);
-uintmax_t		get_uint(t_arg *arg);
-char			*pf_itoa(t_arg *arg, intmax_t n, int base);
-char			*pf_uitoa(uintmax_t un, int base);
+char			*format_num(t_arg *arg, char *prefix, char *num);
+char			*get_prefix(t_arg *arg, char *num, int base);
+intmax_t		get_int(t_buff *buff, t_arg *arg);
+uintmax_t		get_uint(t_buff *buff, t_arg *arg);
+char			*uitoa(uintmax_t un, int base, t_bool negative);
 
 extern const t_conv	g_disp[];
 extern const int	g_disp_count;

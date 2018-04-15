@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tolower.c                                       :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/16 01:23:37 by sgardner          #+#    #+#             */
-/*   Updated: 2017/01/04 08:19:28 by sgardner         ###   ########.fr       */
+/*   Created: 2016/12/16 01:17:17 by sgardner          #+#    #+#             */
+/*   Updated: 2018/03/19 16:42:08 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/*
-** ASSIGNMENT:
-** Re-code similarly named libc function.
-*/
-
-int	ft_tolower(int c)
+char	*ft_strchr(const char *s, int c)
 {
-	return ((ft_isupper(c)) ? c + ' ' : c);
+	char	b;
+
+	b = (char)c;
+	while (*s && *s != b)
+		++s;
+	return ((*s == b) ? (char *)s : NULL);
 }
