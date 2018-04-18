@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/13 03:09:52 by sgardner          #+#    #+#             */
-/*   Updated: 2018/04/15 17:18:58 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/04/17 19:25:32 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ static char		*build_num(t_buff *buff, t_arg *arg, int base, t_bool is_signed)
 			return (ft_strdup(""));
 		num = uitoa(un, base, FALSE);
 	}
-	if (num)
-		num = fix_negative(format_num(arg, get_prefix(arg, num, base), num));
+	num = fix_negative(format_num(arg, get_prefix(arg, num, base), num));
 	return (num);
 }
 

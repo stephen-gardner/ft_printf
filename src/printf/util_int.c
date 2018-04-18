@@ -6,11 +6,10 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/14 01:51:54 by sgardner          #+#    #+#             */
-/*   Updated: 2018/04/15 05:24:10 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/04/17 19:39:37 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "ft_printf.h"
 
 char		*format_num(t_arg *arg, char *prefix, char *num)
@@ -38,7 +37,6 @@ char		*format_num(t_arg *arg, char *prefix, char *num)
 	ft_memcpy(res, prefix, prefix_len);
 	ft_memset(res + prefix_len, '0', pad);
 	ft_memcpy(res + prefix_len + pad, num, len);
-	free(num);
 	return (res);
 }
 
@@ -113,8 +111,8 @@ uintmax_t	get_uint(t_buff *buff, t_arg *arg)
 
 char		*uitoa(uintmax_t un, int base, t_bool negative)
 {
-	char	num[32];
-	char	*pos;
+	static char	num[32];
+	char		*pos;
 
 	pos = &num[31];
 	*pos-- = '\0';
@@ -127,5 +125,5 @@ char		*uitoa(uintmax_t un, int base, t_bool negative)
 	}
 	if (negative)
 		*pos-- = '-';
-	return (ft_strdup(++pos));
+	return (++pos);
 }
