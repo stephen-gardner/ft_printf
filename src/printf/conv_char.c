@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/13 19:02:57 by sgardner          #+#    #+#             */
-/*   Updated: 2018/04/15 17:23:31 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/04/27 21:07:53 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ t_bool	conv_str(t_buff *buff, t_arg *arg)
 		return (conv_wstr(buff, arg));
 	if (!(str = va_arg(buff->ap, char *)))
 		str = "(null)";
-	len = LEN(str);
-	if (F(F_PRECISE) && len > arg->precision)
-		len = arg->precision;
+	len = (F(F_PRECISE)) ? NLEN(str, arg->precision) : LEN(str);
 	if (!(out = ft_memalloc(len)))
 		return (FALSE);
 	ft_memcpy(out, str, len);
