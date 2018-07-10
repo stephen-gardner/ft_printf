@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 01:23:55 by sgardner          #+#    #+#             */
-/*   Updated: 2018/04/15 18:11:51 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/05/03 06:41:17 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,13 @@
 # define NLEN(x, y)		ft_strnlen(x, y)
 # define MAX(x, y)		((x > y) ? x : y)
 # define MIN(x, y)		((x < y) ? x : y)
-# define FALSE 			0
-# define TRUE			!FALSE
+
+# ifndef FALSE
+#  define FALSE 		0
+# endif
+# ifndef TRUE
+#  define TRUE			!FALSE
+# endif
 
 typedef int				t_bool;
 typedef unsigned char	t_byte;
@@ -109,6 +114,7 @@ char	*ft_strnstr(const char *s1, const char *s2, size_t n);
 
 void	*ft_memalloc(size_t size);
 void	ft_memdel(void **ap);
+void	*ft_revbytes(void *ptr, size_t n);
 char	*ft_strcapitalize(char *str);
 void	ft_strclr(char *s);
 void	ft_strdel(char **as);

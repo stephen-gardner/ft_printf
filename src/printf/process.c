@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/11 23:05:57 by sgardner          #+#    #+#             */
-/*   Updated: 2018/04/15 07:10:57 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/07/10 02:58:05 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,15 @@ t_bool			build_arg(t_buff *buff, t_arg *arg)
 
 static t_bool	build_buffer(t_buff *buff, const char *fmt)
 {
-	char		*segment;
-	int			n;
+	int	n;
 
 	while (*fmt)
 	{
 		n = 0;
 		while (fmt[n] && fmt[n] != '%')
 			++n;
-		if (!(segment = ft_mlalloc(buff->mchain, n)))
+		if (!ft_mladd(buff->mchain, (void *)fmt, n | NOFREE))
 			return (FALSE);
-		ft_memcpy(segment, fmt, n);
 		fmt += n;
 		buff->len += n;
 		if (*fmt == '%')
@@ -104,7 +102,7 @@ static t_bool	write_buffer(char **ret, size_t size, t_mchain *mchain)
 {
 	t_mlink	*mlink;
 	char	*tmp;
-	int		len;
+	size_t	len;
 
 	if (!*ret && !(*ret = ft_memalloc(size + 1)))
 		return (FALSE);
@@ -112,7 +110,8 @@ static t_bool	write_buffer(char **ret, size_t size, t_mchain *mchain)
 	mlink = ft_mlrev(mchain);
 	while (mlink && size)
 	{
-		len = (mlink->size > size) ? size : mlink->size;
+		if ((len = MLSIZE(mlink)) > size)
+			len = size;
 		ft_memcpy(tmp, mlink->ptr, len);
 		mlink = ft_mlpop(mchain);
 		tmp += len;

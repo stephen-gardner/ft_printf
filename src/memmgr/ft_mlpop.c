@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/02 17:25:01 by sgardner          #+#    #+#             */
-/*   Updated: 2017/12/06 00:30:37 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/07/10 02:07:46 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ t_mlink	*ft_mlpop(t_mchain *mchain)
 	if (mchain->end == mchain->start)
 		mchain->end = NULL;
 	next = mchain->start->next;
-	free(mchain->start->ptr);
+	if (CANFREE(mchain->start))
+		free(mchain->start->ptr);
 	free(mchain->start);
 	mchain->link_count--;
 	return ((mchain->start = next));
