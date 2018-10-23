@@ -23,6 +23,7 @@ SRC = \
 	printf/conv_misc\
 	printf/conv_wchar\
 	printf/ft_printf\
+	printf/ft_vprintf\
 	printf/parser\
 	printf/process\
 	printf/util\
